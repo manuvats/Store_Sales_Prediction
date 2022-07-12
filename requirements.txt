@@ -1,0 +1,19 @@
+# local package install
+#-e .
+
+# third party packages
+dvc
+dvc[gdrive]
+sklearn
+pandas
+numpy
+pytest
+tox
+flake8
+flask
+gunicorn
+cassandra-driver
+pyyaml
+datetime
+joblib
+mlflow

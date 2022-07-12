@@ -1,0 +1,64 @@
+base:
+  project: storesales-project
+  random_state: 42
+  target_col: TARGET
+
+data_source:
+  train_source: data_given/Train.csv
+  test_source: data_given/Test.csv
+
+connect_cassandra:
+  cloud_config: C:\Users\Manu\Documents\ineuron\Internship\StoreSalesPrediction\secure-connect-ineuron.zip
+  client_id: agUmJJZtyYDUGumhwyWXTvZv
+  client_secret: kxJ40+kUaRKly3AQH7WlImNwr0tlsYR3ZexMJ4F+q0hr_u+D8zFhw4Yg4NJTuipHhbjhDPX3EgpfWgwFHrZ,tLgcbpNzo_Z_4OE4frohn+ao9cmavKNuX4PFzF8xUnfe
+  
+cassandra_db:
+  keyspace: store_sales
+  data_table: big_mart
+  #test_table: test
+  define_columns: Item_Identifier varchar PRIMARY KEY, Item_Weight varchar, Item_Fat_Content varchar, Item_Visibility varchar,  Item_Type varchar, Item_MRP varchar, Outlet_Identifier varchar, Outlet_Establishment_Year varchar, Outlet_Size varchar, Outlet_Location_type varchar, Outlet_Type varchar, Item_Outlet_Sales varchar, source varchar
+  #define_columns: Item_Identifier varchar PRIMARY KEY, Item_Weight float, Item_Fat_Content varchar, Item_Visibility float, Item_MRP float, Outlet_Identifier varchar, Outlet_Size varchar, Outlet_Location_type varchar, Outlet_Type varchar, Item_Outlet_Sales float, source varchar, Item_Type_Combined varchar, Outlet_Years float
+  #define_test_columns: item_id varchar PRIMARY KEY, item_weight float, item_fat varchar, item_visibility float, item_type varchar, item_mrp float, outlet_id varchar, outlet_estd_yr int, outlet_size varchar, outlet_location varchar, outlet_type varchar
+  columns: Item_Identifier, Item_Weight, Item_Fat_Content, Item_Visibility, Item_Type, Item_MRP, Outlet_Identifier, Outlet_Establishment_Year, Outlet_Size, Outlet_Location_Type, Outlet_Type, Item_Outlet_Sales, source
+  #test_cols: item_id, item_weight, item_fat, item_visibility, item_type, item_mrp, outlet_id, outlet_estd_yr, outlet_size, outlet_location, outlet_type
+
+preprocess_data:
+  processed_data: data/pre-processed/data.csv
+  
+one_hot_encoded:
+  data_path: data/one-hot-encoded/one_hot_encoded.csv
+  id_columns: [item_identifier, outlet_identifier]
+  target: item_outlet_sales 
+  source: source
+  columns: ['item_fat_content','outlet_location_type','outlet_size','outlet_type', 'item_type_combined']
+
+split_data:
+  train_path: data/split-data/train.csv
+  test_path: data/split-data/test.csv
+  validation_path: data/split-data/val.csv
+  val_size: 0.2
+
+estimators:
+  DecisionTree:
+    params:
+      max_depth: 8
+      min_samples_leaf: 150
+      
+cross_validation:
+  cv: 20
+  scoring: neg_mean_squared_error
+
+model_dir: saved_models
+  
+reports:
+  params: report/params.json
+  scores: report/scores.json
+
+webapp_model_dir: prediction_service/model/model.joblib
+
+mlflow_config:
+  artifacts_dir: artifacts
+  experiment_name: Decision Tree regression
+  run_name: mlops
+  registered_model_name: DecisionTreeStoreSalesModel
+  remote_server_uri: http://0.0.0.0:1234
