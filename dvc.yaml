@@ -1,54 +1,52 @@
 stages:
-  load_data:
-    cmd: python src/cassandraDBLoad.py --config=params.yaml
-    deps:
-    - src/get_data.py
-    - data_given/Train.csv
-    - data_given/Test.csv
-    connect_cassandra:
-    - connect_cassandra.cloud_config
-    - connect_cassandra.client_id
-    - connect_cassandra.client_secret
-      
-    cassandra_db:
-    - cassandra_db.keyspace
-    - cassandra_db.data_table
-    - cassandra_db.define_columns
-    - cassandra_db.columns
+  #load_data:
+  #  cmd: python src/cassandraDBLoad.py --config=params.yaml
+  #  deps:
+  #  - src/get_data.py
+  #  - src/cassandraDBLoad.py
+  #  - data_given/Train.csv
+  #  - data_given/Test.csv
+  #  - secure-connect-ineuron.zip
 
   preprocess_data:
     cmd: python src/preprocess_data.py --config=params.yaml
     deps:
     - src/get_data.py
-    - src/cassandraDBLoad.py
-    - src/preproces_data.py
+    - src/preprocess_data.py
     outs:
     - data/pre-processed/data.csv
 
   one_hot_encoding:
     cmd: python src/one_hot_encoding.py --config=params.yaml
     deps:
+    - data/pre-processed/data.csv
     - src/get_data.py 
-  
+    - src/one_hot_encoding.py
+    outs:
+    - data/one_hot_encoded/one_hot_encoded.csv
+
   split_data:
     cmd: python src/split_data.py --config=params.yaml
     deps:
+    - data/one_hot_encoded/one_hot_encoded.csv
+    - src/get_data.py
     - src/split_data.py
-    - data/one-hot-encoded/one-hot-encoded.csv
     outs:
     - data/split-data/train.csv
     - data/split-data/test.csv
     - data/split-data/val.csv
+    
+  train_and_evaluate:
+    cmd: python src/train_and_evaluate.py --config=params.yaml
+    deps:
+    - data/split-data/train.csv
+    - data/split-data/test.csv
+    - src/split_data.py 
+    - src/train_and_evaluate.py
+    params:
+    - estimators.DecisionTree.params.max_depth
+    - estimators.DecisionTree.params.min_samples_leaf
 
-#train_and_evaluate:
-#    cmd: python src/train_and_evaluate.py --config=params.yaml
-#    deps:
-#    - data/split_data/train.csv
-#    - data/split_data/test.csv 
-#    - src/train_and_evaluate.py
-#    params:
-#    - estimators.DecisionTree.params.max_depth
-#    - estimators.DecisionTree.params.min_samples_leaf
     #metrics:
     #- report/scores.json:
     #    cache: false
@@ -56,7 +54,7 @@ stages:
     #    cache: false
     #outs:
     #- saved_models/model.joblib
-    #log_production_model:
+  #log_production_model:
     #cmd: python src/log_production_model.py --config=params.yaml
     #deps:
     #- src/log_production_model.py

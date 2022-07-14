@@ -4,9 +4,8 @@ import random
 import yaml
 import pandas as pd
 import argparse
-from get_data import read_params
+from get_data import read_params, get_data
 import cassandra
-from cassandra.concurrent import execute_concurrent_with_args, execute_concurrent
 from cassandra.cluster import Cluster, ExecutionProfile
 from cassandra.auth import PlainTextAuthProvider
 from cassandra.query import SimpleStatement, BatchStatement
@@ -53,7 +52,7 @@ def cassandraDBLoad(config_path):
         create_table = f"CREATE TABLE IF NOT EXISTS {table_}({define_columns});"
         start_create = time.process_time()
         table_result = session.execute(create_table)
-        print("Time taken to create the table - " + str(time.process_time() - start_create))
+        #print("Time taken to create the table - " + str(time.process_time() - start_create))
         #print(train_result)
         
         train = pd.read_csv(config["data_source"]["train_source"])
@@ -93,11 +92,14 @@ def cassandraDBLoad(config_path):
                     )
                 )
             session.execute_async(batch)
-        print("Time taken to insert df - " + str(time.process_time() - start_insert))
+        print("Time taken to insert df - " + str((time.process_time() - start_insert)/60) + " minutes")
+
+        '''new_cols = [col.replace(" ", "_") for col in df.columns]
+        raw_data_path = config["load_data"]["raw_data_path"]
+        df.to_csv(raw_data_path, sep=",", index=False, header=new_cols)'''
 
     except Exception as e:
         raise Exception("(cassandraDBLoad): Something went wrong in the CassandraDB Load operations\n" + str(e))
-
 
 if __name__=="__main__":
     args = argparse.ArgumentParser()

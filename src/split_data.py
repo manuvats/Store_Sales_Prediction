@@ -18,7 +18,7 @@ def split_and_saved_data(config_path):
         test_data_path = config["split_data"]["test_path"]
         val_data_path = config["split_data"]["validation_path"]
         
-        input_data_path = config["one_hot_encoded"]["data_path"]
+        input_data_path = config["one_hot_encoding"]["data_path"]
         
         split_ratio = config["split_data"]["val_size"]
         random_state = config["base"]["random_state"]
