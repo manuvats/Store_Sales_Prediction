@@ -9,7 +9,7 @@ import numpy as np
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeRegressor
-from get_data import read_params
+#from get_data import read_params
 from urllib.parse import urlparse
 import argparse
 import joblib
@@ -23,8 +23,8 @@ def eval_metrics(actual, pred):
     return rmse, mae, r2
 
 
-def train_and_evaluate(config_path):
-    config = read_params(config_path)
+def train_and_evaluate(config):
+    #config = read_params(config_path)
     val_data_path = config["split_data"]["validation_path"]
     train_data_path = config["split_data"]["train_path"]
     random_state = config["base"]["random_state"]
@@ -83,7 +83,9 @@ def train_and_evaluate(config_path):
     #####################################################
 
     if __name__ == "__main__":
+        from get_data import read_params
         args = argparse.ArgumentParser()
         args.add_argument("--config", default="params.yaml")
         parsed_args = args.parse_args()
-        train_and_evaluate(config_path=parsed_args.config)
+        config = read_params(parsed_args.config)
+        train_and_evaluate(config)
