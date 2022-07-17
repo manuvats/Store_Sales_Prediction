@@ -18,7 +18,7 @@ app = Flask(__name__, static_folder=static_dir,template_folder=template_dir)
 
 args = argparse.ArgumentParser()
 args.add_argument("--config", default = "params.yaml")
-parsed_args = args.parse_args()
+parsed_args, unknown = args.parse_known_args()
 config = get_data.read_params(parsed_args.config)
 
 @app.route("/", methods=["GET", "POST"])

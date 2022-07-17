@@ -45,6 +45,6 @@ if __name__=="__main__":
     from get_data import read_params
     args = argparse.ArgumentParser()
     args.add_argument("--config", default = "params.yaml")
-    parsed_args, unknown = args.parse_known_args()
+    parsed_args = args.parse_args()
     config = read_params(parsed_args.config)
     split_and_saved_data(config)
