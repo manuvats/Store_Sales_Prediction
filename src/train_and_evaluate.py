@@ -27,7 +27,7 @@ def train_and_evaluate(config):
         val_data_path = config["split_data"]["validation_path"]
         train_data_path = config["split_data"]["train_path"]
         random_state = config["base"]["random_state"]
-        model_dir = config["model_dir"]
+        model_dir = config["webapp_model_dir"]
 
         max_depth = config["estimators"]["DecisionTree"]["params"]["max_depth"]
         min_samples_leaf = config["estimators"]["DecisionTree"]["params"]["min_samples_leaf"]
