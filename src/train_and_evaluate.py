@@ -28,6 +28,7 @@ def train_and_evaluate(config):
         train_data_path = config["split_data"]["train_path"]
         random_state = config["base"]["random_state"]
         model_dir = config["webapp_model_dir"]
+        model_name = config["model_filename"]
 
         max_depth = config["estimators"]["DecisionTree"]["params"]["max_depth"]
         min_samples_leaf = config["estimators"]["DecisionTree"]["params"]["min_samples_leaf"]
@@ -79,8 +80,8 @@ def train_and_evaluate(config):
 
 
         os.makedirs(model_dir, exist_ok=True)
-        model_path = os.path.join(model_dir, "model.joblib")
-        print(model_path)
+        model_path = os.path.join(model_dir, model_name)
+        #print(model_path)
         joblib.dump(dtr, model_path)
 
     except Exception as e:

@@ -25,8 +25,10 @@ def read_params(config_path=params_path):
 
 def predict(data):
     config = read_params(params_path)
-    model_dir_path = config["webapp_model_dir"]
-    model = joblib.load(model_dir_path)
+    model_dir = config["webapp_model_dir"]
+    model_name = config["model_filename"]
+    model_path = os.path.join(model_dir, model_name)
+    model = joblib.load(model_path)
     prediction = model.predict(data).tolist()[0]
     return prediction
 

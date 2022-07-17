@@ -55,6 +55,7 @@ reports:
   scores: report/scores.json
 
 webapp_model_dir: saved_models
+model_filename: model.joblib
 
 mlflow_config:
   artifacts_dir: artifacts
