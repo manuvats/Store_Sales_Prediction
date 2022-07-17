@@ -30,7 +30,7 @@ def preprocess_data(config_path):
 
         count_query = f"SELECT COUNT(*) from {config['cassandra_db']['data_table']} LIMIT 20000"
         count_rslt = session.execute(count_query, timeout=None)
-        print(count_rslt._current_rows)
+        #print(count_rslt._current_rows)
         query = f"SELECT * from {config['cassandra_db']['data_table']}"
         simple_statement = SimpleStatement(query, consistency_level=ConsistencyLevel.ONE, fetch_size=None)
         execute_result = session.execute(simple_statement, timeout=None)
