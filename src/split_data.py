@@ -39,7 +39,7 @@ def split_and_saved_data(config):
         return test.columns.tolist()
 
     except Exception as e:
-        raise Exception("(split_and_saved_data): Something went wrong in the splitting of data\n" + str(e))
+        raise Exception("(split_and_saved_data): \n" + str(e))
 
 if __name__=="__main__":
     from get_data import read_params
