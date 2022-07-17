@@ -80,7 +80,7 @@ def train_and_evaluate(config):
 
         os.makedirs(model_dir, exist_ok=True)
         model_path = os.path.join(model_dir, "model.joblib")
-
+        print(model_path)
         joblib.dump(dtr, model_path)
 
     except Exception as e:
