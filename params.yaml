@@ -1,7 +1,7 @@
 base:
   project: storesales-project
   random_state: 42
-  target_col: TARGET
+  target_col: item_outlet_sales
 
 data_source:
   train_source: data_given/Train.csv
@@ -37,6 +37,9 @@ split_data:
   validation_path: data/split-data/val.csv
   val_size: 0.2
 
+test_prediction:
+  output_path: data/predicted_test/test.csv
+
 estimators:
   DecisionTree:
     params:
@@ -53,11 +56,11 @@ reports:
   params: report/params.json
   scores: report/scores.json
 
-webapp_model_dir: prediction_service/model/model.joblib
+webapp_model_dir: saved_models
 
 mlflow_config:
   artifacts_dir: artifacts
   experiment_name: Decision Tree regression
   run_name: mlops
   registered_model_name: DecisionTreeStoreSalesModel
-  remote_server_uri: http://0.0.0.0:1234
+  remote_server_uri: http://127.0.0.1:5000

@@ -4,9 +4,11 @@ import numpy as np
 from prediction_service import prediction
 import argparse
 import pandas as pd
+import logging
 from src import inputTransform, get_data, split_data
 #from get_data import read_params
-
+logging.basicConfig(filename='StoreSales_record.log', level=logging.DEBUG, format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
+ 
 webapp_root = "webapp"
 
 static_dir = os.path.join(webapp_root, "static")
@@ -92,3 +94,8 @@ def index():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
+    app.logger.debug("debug log info")
+    app.logger.info("Info log information")
+    app.logger.warning("Warning log info")
+    app.logger.error("Error log info")
+    app.logger.critical("Critical log info")

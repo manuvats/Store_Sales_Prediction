@@ -7,9 +7,10 @@ from sklearn.impute import KNNImputer
 import argparse
 from get_data import read_params
 import cassandra
+from cassandra import ConsistencyLevel
 from cassandra.cluster import Cluster
 from cassandra.auth import PlainTextAuthProvider
-
+from cassandra.query import SimpleStatement
 def pandas_factory(colnames, rows):
     return pd.DataFrame(rows, columns=colnames)
     
@@ -27,11 +28,17 @@ def preprocess_data(config_path):
         session.row_factory = pandas_factory
         session.default_fetch_size = None
 
+        count_query = f"SELECT COUNT(*) from {config['cassandra_db']['data_table']} LIMIT 20000"
+        count_rslt = session.execute(count_query, timeout=None)
+        print(count_rslt._current_rows)
         query = f"SELECT * from {config['cassandra_db']['data_table']}"
-        rslt = session.execute(query, timeout=None)
-        data = rslt._current_rows
-        #print(data.columns)
-        data.replace('NA', np.NaN)
+        simple_statement = SimpleStatement(query, consistency_level=ConsistencyLevel.ONE, fetch_size=None)
+        execute_result = session.execute(simple_statement, timeout=None)
+        data = execute_result._current_rows
+        #rslt = session.execute(query, timeout=None)
+        #data = result._current_rows
+        #print(data.shape)
+        data = data.replace('NA', np.nan)
         #Making 0 values as missing in Item_Visibility
         data["item_visibility"][data['item_visibility'] == 0] = np.nan
 
@@ -53,17 +60,18 @@ def preprocess_data(config_path):
         #Mark non-consumables as separate category in low_fat:
         data.loc[data['item_type_combined']=="Non-Consumable",'item_fat_content'] = "Non-Edible"
 
+        #print(data[data['item_weight'] == 'NA'].shape[0])
+
+        data[['item_mrp', 'item_outlet_sales', 'item_visibility', 'item_weight']] = data[['item_mrp', 'item_outlet_sales', 'item_visibility', 'item_weight']].astype(float)
         #Label Encoding to impute missing values For regression, SVC, etc.
         le = LabelEncoder()
         series = data['outlet_size']
         data['outlet_size'] = pd.Series(le.fit_transform(series[series.notnull()]), 
                                         index=series[series.notnull()].index)
         
-        #Convert features to appropriate datatypes
-        convert_dict = {'outlet_establishment_year': float,
-                        'outlet_years': float}
-        data = data.astype(convert_dict)
-
+        data[['item_mrp', 'item_outlet_sales', 'item_visibility', 'item_weight']] = data[['item_mrp', 'item_outlet_sales', 'item_visibility', 'item_weight']].astype(float)
+        #data = data.astype(convert_dict)
+        #print(data.dtypes)
         # Using Knn imputer to impute missing values instead of using mean, mode, median, etc.
         imputer = KNNImputer()
         data.loc[:,(data.dtypes=='float64').values] = imputer.fit_transform(data.loc[:,(data.dtypes=='float64').values])
@@ -93,9 +101,8 @@ def preprocess_data(config_path):
         #train.to_csv(train_processed_path, sep=",", index=False, encoding = "utf-8")
         #test.to_csv(test_processed_path, sep=",", index=False, encoding = "utf-8")
         
-
     except Exception as e:
-        raise Exception("(processData): Something went wrong in the data preprocessing operations\n" + str(e))
+        raise Exception("(preprocessData): " + str(e))
 
 
 if __name__=="__main__":

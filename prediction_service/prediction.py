@@ -3,7 +3,7 @@ import os
 import json
 import joblib
 import numpy as np
-
+import pandas as pd
 
 params_path = "params.yaml"
 schema_path = os.path.join("prediction_service", "schema_in.json")
@@ -29,6 +29,7 @@ def predict(data):
     model = joblib.load(model_dir_path)
     prediction = model.predict(data).tolist()[0]
     return prediction
+
 
 def get_schema(schema_path=schema_path):
     with open(schema_path) as json_file:

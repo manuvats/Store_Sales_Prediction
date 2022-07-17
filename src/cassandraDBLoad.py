@@ -64,6 +64,7 @@ def cassandraDBLoad(config_path):
         test['source']='test'
         df = pd.concat([train, test],ignore_index=True)
         df = df.fillna('NA')
+        print(df.shape)
         columns = list(df)
         for col in columns:
             df[col] = df[col].map(str)
@@ -71,10 +72,6 @@ def cassandraDBLoad(config_path):
         columns = config["cassandra_db"]["columns"]
         insert_qry = f"INSERT INTO {table_}({columns}) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?) IF NOT EXISTS"
         statement = session.prepare(insert_qry)
-        parameters = [
-            (df.iat[i,0], df.iat[i,1], df.iat[i,2], df.iat[i,3], df.iat[i,4], df.iat[i,5], df.iat[i,6], 
-            df.iat[i,7], df.iat[i,8], df.iat[i,9], df.iat[i,10], df.iat[i,11], df.iat[i,12]) 
-            for i in range(len(df))]
         #print(insert_qry)
         #print(tr_prepared)
         #print(prepared)
@@ -83,15 +80,15 @@ def cassandraDBLoad(config_path):
         batch = BatchStatement()
         for i in progressbar(range(len(df)), "Inserting: ", 40):
             time.sleep(0.1)            
-            batch.add(
-                    statement,
-                    (
+            session.execute_async(
+                statement,
+                    [
                         df.iat[i,0], df.iat[i,1], df.iat[i,2], df.iat[i,3], df.iat[i,4], df.iat[i,5], 
                         df.iat[i,6], df.iat[i,7], df.iat[i,8], df.iat[i,9], df.iat[i,10], df.iat[i,11], 
                         df.iat[i,12]
-                    )
+                    ]
                 )
-            session.execute_async(batch)
+            #session.execute_async(batch)
         print("Time taken to insert df - " + str((time.process_time() - start_insert)/60) + " minutes")
 
         '''new_cols = [col.replace(" ", "_") for col in df.columns]

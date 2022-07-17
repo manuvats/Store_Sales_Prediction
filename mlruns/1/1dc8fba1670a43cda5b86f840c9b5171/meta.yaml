@@ -1,0 +1,15 @@
+artifact_uri: ./mlruns/1/1dc8fba1670a43cda5b86f840c9b5171/artifacts
+end_time: 1658051686493
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+name: ''
+run_id: 1dc8fba1670a43cda5b86f840c9b5171
+run_uuid: 1dc8fba1670a43cda5b86f840c9b5171
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1658051685660
+status: 3
+tags: []
+user_id: Manu

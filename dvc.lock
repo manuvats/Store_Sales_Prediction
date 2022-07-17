@@ -17,39 +17,39 @@ stages:
     cmd: python src/split_data.py --config=params.yaml
     deps:
     - path: data/one_hot_encoded/one_hot_encoded.csv
-      md5: 7c66d6aff0717d3d97f5561169560648
-      size: 138731
+      md5: 4d68b19ee9684e215150704eb4789652
+      size: 118430
     - path: src/get_data.py
       md5: 515746cbd06b53e5c4988fcf30f11ad6
       size: 851
     - path: src/split_data.py
-      md5: df40fbef70cc05e0cd0c4fd7795247dd
-      size: 1925
+      md5: 8168d6c176728691ecda7015cc046f9b
+      size: 2020
     outs:
     - path: data/split-data/test.csv
-      md5: a2c588adc3788b278f22f12b66103c43
-      size: 501
+      md5: dca3ce060db6971c3895b9f42ff40b46
+      size: 467
     - path: data/split-data/train.csv
-      md5: 0e3d576a6cc68631b764022173491b4b
-      size: 103536
+      md5: e5021305e338a3bdaef0421e4c359a67
+      size: 87291
     - path: data/split-data/val.csv
-      md5: 9721d3d70bfbee1a4d64ffb0f95a1767
-      size: 26353
+      md5: 9dc58c925caa79899eb3840ad93648b6
+      size: 22263
   train_and_evaluate:
     cmd: python src/train_and_evaluate.py --config=params.yaml
     deps:
     - path: data/split-data/test.csv
-      md5: a2c588adc3788b278f22f12b66103c43
-      size: 501
+      md5: dca3ce060db6971c3895b9f42ff40b46
+      size: 467
     - path: data/split-data/train.csv
-      md5: 0e3d576a6cc68631b764022173491b4b
-      size: 103536
+      md5: e5021305e338a3bdaef0421e4c359a67
+      size: 87291
     - path: src/split_data.py
-      md5: df40fbef70cc05e0cd0c4fd7795247dd
-      size: 1925
+      md5: 8168d6c176728691ecda7015cc046f9b
+      size: 2020
     - path: src/train_and_evaluate.py
-      md5: 7aceda598edce76707d682e516b2f3b0
-      size: 3033
+      md5: a2c1c2a26af5710ea31d4df279b4fab9
+      size: 3329
     params:
       params.yaml:
         estimators.DecisionTree.params.max_depth: 8
@@ -64,9 +64,9 @@ stages:
       md5: 515746cbd06b53e5c4988fcf30f11ad6
       size: 851
     - path: src/one_hot_encoding.py
-      md5: cb79d139a5745b03ac8f875313fc8f87
-      size: 1549
+      md5: da197c384993f5e31e57653026aa0985
+      size: 1655
     outs:
     - path: data/one_hot_encoded/one_hot_encoded.csv
-      md5: 7c66d6aff0717d3d97f5561169560648
-      size: 138731
+      md5: 4d68b19ee9684e215150704eb4789652
+      size: 118430

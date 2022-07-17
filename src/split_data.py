@@ -5,15 +5,9 @@ import os
 import argparse
 import pandas as pd
 from sklearn.model_selection import train_test_split
-#from get_data import read_params
-import cassandra
-from cassandra.cluster import Cluster
-from cassandra.auth import PlainTextAuthProvider
 
 def split_and_saved_data(config):
-    try:
-        #config = read_params(config_path)
-         
+    try: 
         train_data_path = config["split_data"]["train_path"]
         test_data_path = config["split_data"]["test_path"]
         val_data_path = config["split_data"]["validation_path"]
