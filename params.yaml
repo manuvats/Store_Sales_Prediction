@@ -50,8 +50,6 @@ cross_validation:
   cv: 20
   scoring: neg_mean_squared_error
 
-#model_dir: saved_models
-  
 reports:
   params: report/params.json
   scores: report/scores.json
