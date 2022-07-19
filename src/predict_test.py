@@ -20,8 +20,15 @@ def predict_testdata(config_path):
     try:
         config = read_params(config_path)
         model_path = config["webapp_model_dir"]
-        test_df = config["split_data"]["test_path"]
+        test_data_path = config["split_data"]["test_path"]
+        test_df = pd.read_csv(test_data_path, sep=",")
+
         out_path = config["test_prediction"]["output_path"]
+
+        model_dir = config["webapp_model_dir"]
+        model_name = config["model_filename"]
+        model_path = os.path.join(model_dir, model_name)
+        print(model_path)
         model = joblib.load(model_path)
         prediction = model.predict(test_df)
         test_df['item_outlet_sales'] = prediction

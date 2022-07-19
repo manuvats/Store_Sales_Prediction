@@ -63,3 +63,6 @@ mlflow_config:
   run_name: mlops
   registered_model_name: DecisionTreeStoreSalesModel
   remote_server_uri: http://127.0.0.1:5000
+
+logger:
+  app: app.log

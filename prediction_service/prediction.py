@@ -4,11 +4,14 @@ import json
 import joblib
 import numpy as np
 import pandas as pd
+#import logging
 
 params_path = "params.yaml"
 schema_path = os.path.join("prediction_service", "schema_in.json")
 
-class NotInRange(Exception):
+
+
+'''class NotInRange(Exception):
     def __init__(self, message="Values entered are not in expected range"):
         self.message = message
         super().__init__(self.message)
@@ -16,7 +19,7 @@ class NotInRange(Exception):
 class NotInCols(Exception):
     def __init__(self, message="Not in cols"):
         self.message = message
-        super().__init__(self.message)
+        super().__init__(self.message)'''
 
 def read_params(config_path=params_path):
     with open(config_path) as yaml_file:

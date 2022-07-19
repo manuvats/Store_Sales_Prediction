@@ -7,7 +7,6 @@ import pandas as pd
 import logging
 from src import inputTransform, get_data, split_data
 #from get_data import read_params
-logging.basicConfig(filename='StoreSales_record.log', level=logging.DEBUG, format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
  
 webapp_root = "webapp"
 
@@ -20,6 +19,8 @@ args = argparse.ArgumentParser()
 args.add_argument("--config", default = "params.yaml")
 parsed_args, unknown = args.parse_known_args()
 config = get_data.read_params(parsed_args.config)
+
+logging.basicConfig(filename=config['logger']['app.py'], level=logging.DEBUG, format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
 
 @app.route("/", methods=["GET", "POST"])
 def index():

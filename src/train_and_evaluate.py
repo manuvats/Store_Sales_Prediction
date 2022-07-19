@@ -84,10 +84,9 @@ def train_and_evaluate(config):
         #print(model_path)
         joblib.dump(dtr, model_path)
 
-    except Exception as e:
-        raise Exception("(train_and_evaluate): " + str(e))
+    
 ################### MLFLOW ###############################
-    '''    mlflow_config = config["mlflow_config"]
+        mlflow_config = config["mlflow_config"]
         remote_server_uri = mlflow_config["remote_server_uri"]
 
         mlflow.set_tracking_uri(remote_server_uri)
@@ -123,9 +122,10 @@ def train_and_evaluate(config):
                     registered_model_name = mlflow_config["registered_model_name"]
                     )
             else:
-                mlflow.sklearn.load_model(dtr, "model")'''
+                mlflow.sklearn.load_model(dtr, "model")
     #####################################################
-        
+    except Exception as e:
+        raise Exception("(train_and_evaluate): " + str(e))    
 
 if __name__=="__main__":
     from get_data import read_params
