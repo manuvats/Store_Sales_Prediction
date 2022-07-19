@@ -20,7 +20,7 @@ args.add_argument("--config", default = "params.yaml")
 parsed_args, unknown = args.parse_known_args()
 config = get_data.read_params(parsed_args.config)
 
-logging.basicConfig(filename=config['logger']['app.py'], level=logging.DEBUG, format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
+logging.basicConfig(filename=config['logger']['app'], level=logging.DEBUG, format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
 
 @app.route("/", methods=["GET", "POST"])
 def index():
